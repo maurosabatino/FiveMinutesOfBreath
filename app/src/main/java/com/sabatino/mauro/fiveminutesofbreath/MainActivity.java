@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 /**
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
      * and a change of the status and navigation bar.
      */
     private static final int UI_ANIMATION_DELAY = 300;
+    private static  boolean counterStarted = false;
     private final Handler mHideHandler = new Handler();
     private View mContentView;
     private final Runnable mHidePart2Runnable = new Runnable() {
@@ -80,18 +82,16 @@ public class MainActivity extends AppCompatActivity {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (AUTO_HIDE) {
                 delayedHide(AUTO_HIDE_DELAY_MILLIS);
-
                 new CountDownTimer(300000, 1000) {
                     TextView myAwesomeTextView = (TextView)findViewById(R.id.fullscreen_content);
+
                     public void onTick(long millisUntilFinished) {
                         int seconds = (int) (millisUntilFinished / 1000) % 60 ;
                         int minutes = (int) ((millisUntilFinished / (1000*60)) % 60);
-
                         myAwesomeTextView.setText(minutes+" : "+seconds);
                     }
-
                     public void onFinish() {
-                        myAwesomeTextView.setText("done!");
+                        myAwesomeTextView.setText("Welcome To The center!");
                     }
                 }.start();
             }
@@ -102,14 +102,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_main);
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
-
-
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
